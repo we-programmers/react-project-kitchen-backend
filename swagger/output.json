@@ -1,0 +1,1120 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Kitchen API",
+    "description": "API бэкенда проектной кухни",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
+    }
+  },
+  "paths": {
+    "/api/user": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Получить данные пользователя [на фронте - getUser()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "headers",
+            "description": "Token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User successfully obtained.",
+            "schema": {
+              "$ref": "#/definitions/Auth"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Обновить данные пользователя [на фронте - patchUser()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "headers",
+            "description": "Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User data.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string",
+                      "example": "John Smith"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "john@gmail.com"
+                    },
+                    "bio": {
+                      "type": "string",
+                      "example": "My name is John"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "newPassword123"
+                    },
+                    "image": {
+                      "type": "string",
+                      "example": "https://static.productionready.io/images/smiley-cyrus.jpg"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User successfully updated.",
+            "schema": {
+              "$ref": "#/definitions/Auth"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Авторизоваться [на фронте - signIn()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User email.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "john@gmail.com"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "myPassword"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User successfully logged in.",
+            "schema": {
+              "$ref": "#/definitions/Auth"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Зарегистрироваться [на фронте - register()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User data.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string",
+                      "example": "John_Smith"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "john@gmail.com"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "password123"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User successfully registered.",
+            "schema": {
+              "$ref": "#/definitions/Auth"
+            }
+          }
+        }
+      }
+    },
+    "/api/profiles/{username}": {
+      "get": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Получить профиль пользователя [на фронте - getProfile()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile successfully loaded.",
+            "schema": {
+              "$ref": "#/definitions/Profile"
+            }
+          }
+        }
+      }
+    },
+    "/api/profiles/{username}/follow": {
+      "post": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Зафолловить пользователя [на фронте - followUser()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User name"
+          },
+          {
+            "name": "authorization",
+            "in": "headers",
+            "description": "Token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile successfully followed.",
+            "schema": {
+              "$ref": "#/definitions/NewFollowing"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Отфолловить пользователя [на фронте - unfollowUser()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User name"
+          },
+          {
+            "name": "authorization",
+            "in": "headers",
+            "description": "Token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile successfully unfollowed.",
+            "schema": {
+              "$ref": "#/definitions/Profile"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/articles/": {
+      "get": {
+        "tags": [
+          "Article"
+        ],
+        "summary": "Загрузить (отфильтровать) список статей [на фронте - getArticlesBy()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Max articles count on page",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Pagination offset parameter",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "author",
+            "in": "query",
+            "description": "Username",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "favorited",
+            "in": "query",
+            "description": "Username",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "description": "Tag",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Articles successfully loaded.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "articles": {
+                  "$ref": "#/definitions/Articles"
+                },
+                "articlesCount": {
+                  "type": "number",
+                  "example": 1
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Article"
+        ],
+        "summary": "Добавить новую статью [на фронте - createArticle()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "article",
+            "in": "body",
+            "description": "Article content",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "article": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "title"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "about my acticle"
+                    },
+                    "body": {
+                      "type": "string",
+                      "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+                    },
+                    "tagList": {
+                      "type": "array",
+                      "example": [
+                        "tag1",
+                        "tag2"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Artiсle successfully created.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "article": {
+                  "$ref": "#/definitions/Article"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/articles/feed": {
+      "get": {
+        "tags": [
+          "Article"
+        ],
+        "summary": "Загрузить ленту [на фронте - getFeed()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "headers",
+            "description": "Token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Feed successfully loaded.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "articles": {
+                  "$ref": "#/definitions/Articles"
+                },
+                "articlesCount": {
+                  "type": "number",
+                  "example": 1
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/articles/{article}": {
+      "get": {
+        "tags": [
+          "Article"
+        ],
+        "summary": "Загрузить статью [на фронте - getArticle()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "article",
+            "in": "path",
+            "description": "Article slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Artiсle successfully loaded.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "article": {
+                  "$ref": "#/definitions/Article"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Article"
+        ],
+        "summary": "Отредактировать статью [на фронте - updateArticle()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "headers",
+            "description": "Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "article",
+            "in": "body",
+            "description": "Article content",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "article": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "New article title!"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "New info about my acticle"
+                    },
+                    "body": {
+                      "type": "string",
+                      "example": "New lorLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+                    },
+                    "tagList": {
+                      "type": "array",
+                      "example": [
+                        "tag1",
+                        "tag2",
+                        "new_tag!"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Artiсle successfully updated.",
+            "schema": {
+              "$ref": "#/definitions/Article"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Article"
+        ],
+        "summary": "Удалить статью [на фронте - deleteArticle()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "headers",
+            "description": "Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "article",
+            "in": "path",
+            "description": "Article slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Artiсle successfully deleted."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/articles/{article}/favorite": {
+      "post": {
+        "tags": [
+          "Article"
+        ],
+        "summary": "Добавить статью в избранное [на фронте - favoriteArticle()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "headers",
+            "description": "Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "article",
+            "in": "path",
+            "description": "Article slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Artiсle successfully favorited.",
+            "schema": {
+              "$ref": "#/definitions/FavoritedArticle"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Article"
+        ],
+        "summary": "Убрать статью из избранного [на фронте - unfavoriteArticle()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "headers",
+            "description": "Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "article",
+            "in": "path",
+            "description": "Article slug",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "slug": {
+                  "type": "string",
+                  "example": "name-888ugh"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Artiсle successfully unfavorited.",
+            "schema": {
+              "$ref": "#/definitions/Article"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/articles/{article}/comments": {
+      "get": {
+        "tags": [
+          "Article"
+        ],
+        "summary": "Получить комментарии к статье [на фронте - getComments()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "article",
+            "in": "path",
+            "description": "Article slug",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comments successfully loaded.",
+            "schema": {
+              "$ref": "#/definitions/Comments"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Article"
+        ],
+        "summary": "Добавить комментарий к статье [на фронте - addComment()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "headers",
+            "description": "Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "article",
+            "in": "path",
+            "description": "Article slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "comment",
+            "in": "body",
+            "description": "Comment text",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "body": {
+                  "type": "string",
+                  "example": "Awesome comment about anything!"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment successfully created.",
+            "schema": {
+              "$ref": "#/definitions/Comment"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/articles/{article}/comments/{comment}": {
+      "delete": {
+        "tags": [
+          "Article"
+        ],
+        "summary": "Удалить комментарий к статье [на фронте - deleteComment()]",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "headers",
+            "description": "Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "article",
+            "in": "path",
+            "description": "Article slug",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "comment",
+            "in": "path",
+            "description": "Comment id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Comment successfully deleted."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/tags/": {
+      "get": {
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Получить список всех тегов на сайте [на фронте - getTags()]",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Tags successfully loaded.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tags": {
+                  "type": "array",
+                  "example": [
+                    "tag1",
+                    "tag2",
+                    "tag3"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Author": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "John Smith"
+        },
+        "image": {
+          "type": "string",
+          "example": "https://static.productionready.io/images/smiley-cyrus.jpg"
+        },
+        "bio": {
+          "type": "string",
+          "example": "My name is John"
+        },
+        "following": {
+          "type": "boolean",
+          "example": false
+        }
+      }
+    },
+    "Article": {
+      "type": "object",
+      "properties": {
+        "slug": {
+          "type": "string",
+          "example": "title-4ez0lb"
+        },
+        "title": {
+          "type": "string",
+          "example": "title"
+        },
+        "description": {
+          "type": "string",
+          "example": "about my acticle"
+        },
+        "body": {
+          "type": "string",
+          "example": "lorLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2022-04-25T02:21:26.643Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2022-04-25T02:21:26.643Z"
+        },
+        "tagList": {
+          "type": "array",
+          "example": [
+            "tag1",
+            "tag2"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "favorited": {
+          "type": "boolean",
+          "example": false
+        },
+        "favoritesCount": {
+          "type": "number",
+          "example": 3
+        },
+        "author": {
+          "$ref": "#/definitions/Author"
+        }
+      }
+    },
+    "FavoritedArticle": {
+      "type": "object",
+      "properties": {
+        "slug": {
+          "type": "string",
+          "example": "title-4ez0lb"
+        },
+        "title": {
+          "type": "string",
+          "example": "My Article!"
+        },
+        "description": {
+          "type": "string",
+          "example": "About my acticle"
+        },
+        "body": {
+          "type": "string",
+          "example": "LorLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2022-04-25T02:21:26.643Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2022-04-25T02:21:26.643Z"
+        },
+        "tagList": {
+          "type": "array",
+          "example": [
+            "tag1",
+            "tag2"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "favorited": {
+          "type": "boolean",
+          "example": true
+        },
+        "favoritesCount": {
+          "type": "number",
+          "example": 3
+        },
+        "author": {
+          "$ref": "#/definitions/Author"
+        }
+      }
+    },
+    "Articles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Article"
+      }
+    },
+    "Auth": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string",
+              "example": "John Smith"
+            },
+            "email": {
+              "type": "string",
+              "example": "john@gmail.com"
+            },
+            "token": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNmVjZmNmNjQ4N2Y4MDAxNDJiNDFhYSIsInVzZXJuYW1lIjoiMTIzIiwiZXhwIjoxNjU2NjEzMzI3LCJpYXQiOjE2N"
+            },
+            "bio": {
+              "type": "string",
+              "example": "My name is John"
+            },
+            "image": {
+              "type": "string",
+              "example": "https://static.productionready.io/images/smiley-cyrus.jpg"
+            }
+          }
+        }
+      }
+    },
+    "Profile": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string",
+              "example": "John Smith"
+            },
+            "image": {
+              "type": "string",
+              "example": "https://static.productionready.io/images/smiley-cyrus.jpg"
+            },
+            "bio": {
+              "type": "string",
+              "example": "My name is John"
+            },
+            "following": {
+              "type": "boolean",
+              "example": false
+            }
+          }
+        }
+      }
+    },
+    "NewFollowing": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string",
+              "example": "Thomas Andersen"
+            },
+            "image": {
+              "type": "string",
+              "example": "https://static.productionready.io/images/smiley-cyrus.jpg"
+            },
+            "bio": {
+              "type": "string",
+              "example": "My name is Neo"
+            },
+            "following": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        }
+      }
+    },
+    "Comment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "626ee769ccf6c3001528370e"
+        },
+        "body": {
+          "type": "string",
+          "example": "Awesome comment about anything!"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2022-04-25T02:21:26.643Z"
+        },
+        "author": {
+          "$ref": "#/definitions/Author"
+        }
+      }
+    },
+    "Comments": {
+      "type": "object",
+      "properties": {
+        "comments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Comment"
+          }
+        }
+      }
+    }
+  }
+}
