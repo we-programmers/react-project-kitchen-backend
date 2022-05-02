@@ -354,6 +354,13 @@
             "description": "Username",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "description": "Tag",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {

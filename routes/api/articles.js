@@ -65,6 +65,11 @@ router.get('/', auth.optional, function (req, res, next) {
             description: 'Username',
             required: false,
     }
+    #swagger.parameters['tag'] = {
+            in: 'query',
+            description: 'Tag',
+            required: false,
+    }
     #swagger.tags = ['Article']
     #swagger.summary = 'Загрузить (отфильтровать) список статей [на фронте - getArticlesBy()]'
     #swagger.auto = false
